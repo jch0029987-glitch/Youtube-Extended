@@ -1,9 +1,5 @@
 group = "com.jeremy.patches"
 
-plugins {
-    id("app.morphe.patches") // Ensure this plugin ID is present
-}
-
 patches {
     about {
         name = "Jeremy's Extended Patches"
