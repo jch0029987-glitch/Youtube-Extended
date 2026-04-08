@@ -9,8 +9,7 @@ patches {
         license = "GPLv3"
     }
     // ADD THIS LINE: Tells Morphe where to find your 'val testPatch'
-    register("com.jeremy.patches.youtube") 
-}
+    }
 
 kotlin {
     compilerOptions {
