@@ -1,20 +1,18 @@
 package com.jeremy.patches.youtube
 
-import app.morphe.patcher.annotation.MorphPatch
-import app.morphe.patcher.patch.BytecodePatch // Use the specialized BytecodePatch
-import app.morphe.patcher.context.BytecodeContext
+import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.hook.MethodHook
 
-@MorphPatch(
-    name = "InitialToast",
-    description = "Shows a toast message when YouTube is opened.",
-    target = "com.google.android.youtube"
-)
-// In v1.3+, we extend BytecodePatch instead of the sealed Patch class
-class TestPatch : BytecodePatch() { 
+// In Morphe 1.3.1+, use the factory function 'bytecodePatch'
+val testPatch = bytecodePatch {
+    name = "InitialToast"
+    description = "Shows a toast message when YouTube is opened."
+    
+    // Updated target syntax for 2026
+    target("com.google.android.youtube")
 
-    override fun execute(context: BytecodeContext) {
-        // Targeted hook for the main YouTube Activity
+    execute { context ->
+        // Hooking the main YouTube activity
         MethodHook.builder()
             .className("com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity")
             .methodName("onCreate")

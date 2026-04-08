@@ -1,45 +1,41 @@
 group = "com.jeremy.patches"
 
+plugins {
+    id("app.morphe.patches") // Ensure this plugin ID is present
+}
+
 patches {
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
+        name = "Jeremy's Extended Patches"
+        description = "Custom patches for YouTube on Android 17"
+        source = "https://github.com/jch0029987-glitch/Youtube-Extended"
+        author = "Jeremy"
         license = "GPLv3"
     }
+    // ADD THIS LINE: Tells Morphe where to find your 'val testPatch'
+    register("com.jeremy.patches.youtube") 
 }
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
+        // Updated for 2026 Kotlin 2.1+ standards
+        freeCompilerArgs.add("-Xcontext-receivers")
     }
 }
 
 dependencies {
-    // Used by JsonGenerator.
     implementation(libs.gson)
+    // Link your extensions if you have custom Java code
+    implementation(project(":extensions:extension")) 
 }
 
 tasks {
     register<JavaExec>("generatePatchesList") {
-        description = "Build patch with patch list"
-
         dependsOn(build)
-
         classpath = sourceSets["main"].runtimeClasspath
         mainClass.set("app.morphe.util.PatchListGeneratorKt")
     }
-    // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
