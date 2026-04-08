@@ -1,9 +1,8 @@
 package com.jeremy.patches.youtube
 
-import app.morphe.patcher.annotation.Patch
-import app.morphe.patcher.patch.SimpleBytecodePatch
-import app.morphe.patcher.util.proxy.ProxyMethod
-
+import app.morphe.patch.annotation.Patch
+import app.morphe.patch.patch.SimpleBytecodePatch
+import app.morphe.patch.util.proxy.ProxyMethod
 @Patch(
     name = "InitialToast",
     description = "Shows a toast on startup",
