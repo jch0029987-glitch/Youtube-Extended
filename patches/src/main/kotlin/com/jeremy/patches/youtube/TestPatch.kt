@@ -1,33 +1,16 @@
 package com.jeremy.patches.youtube
 
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.fingerprint.Fingerprint
-import app.morphe.patcher.filter.methodCall
-import app.morphe.patcher.filter.string
-import app.morphe.patcher.filter.opcode
-import app.morphe.patcher.Opcode
+import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.AccessFlags
-import app.morphe.patcher.InstructionLocation
 
 private const val WATCH_WHILE_ACTIVITY = "Lcom/google/android/apps/youtube/app/watchwhile/WatchWhileActivity;"
 
 object WatchWhileActivityOnCreateFingerprint : Fingerprint(
     definingClass = WATCH_WHILE_ACTIVITY,
-    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
+    accessFlags = listOf<AccessFlags>(AccessFlags.PUBLIC, AccessFlags.FINAL),
     returnType = "V",
-    parameters = listOf("Landroid/os/Bundle;"),
-    filters = listOf(
-        // Calls super.onCreate(Bundle) — very distinctive
-        methodCall(
-            definingClass = "this",
-            name = "onCreate",
-            returnType = "V",
-            parameters = listOf("Landroid/os/Bundle;")
-        ),
-        // Optional extra anchor (makes it even more reliable)
-        string("WatchWhileActivity"),
-        opcode(Opcode.MOVE_RESULT, InstructionLocation.MatchAfterImmediately())
-    )
+    parameters = listOf("Landroid/os/Bundle;")
 )
 
 val initialToastPatch = bytecodePatch(
