@@ -1,30 +1,29 @@
 package com.jeremy.patches.youtube
 
-import app.morphe.patch.annotation.Patch
-import app.morphe.patch.patch.SimpleBytecodePatch
-import app.morphe.patch.util.proxy.ProxyMethod
-@Patch(
-    name = "InitialToast",
-    description = "Shows a toast on startup",
-    target = "com.google.android.youtube"
-)
-class TestPatch : SimpleBytecodePatch() {
-    override fun execute() {
-        ProxyMethod.builder()
-            .className("com.google.android.apps.youtube.app.application.ShellApplication")
-            .methodName("onCreate")
-            .methodDescriptor("()V")
-            .injectAfter {
-                """
-                android.util.Log.d("MORPH_PATCH", "Patch executed");
-                android.widget.Toast.makeText(
-                    (android.content.Context)this,
-                    "Jeremy's Morph Patch Loaded!",
-                    android.widget.Toast.LENGTH_LONG
-                ).show();
-                """.trimIndent()
-            }
-            .build()
-            .apply(context)
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.patch.bytecodePatch
+import android.widget.Toast
+
+private const val WATCH_ACTIVITY_DESCRIPTOR = "Lcom/google/android/apps/youtube/app/watchwhile/WatchWhileActivity;"
+
+// Reference to the method we want to patch
+// You'll need to replace `onCreateMethod` with the actual Method object from your template
+// Typically: val WatchWhileActivity_onCreate = method(WATCH_ACTIVITY_DESCRIPTOR, "onCreate", "(Landroid/os/Bundle;)V")
+
+val initialToastPatch = bytecodePatch(
+    name = "Initial Toast",
+    description = "Shows a toast on YouTube startup",
+    default = true
+) {
+    execute {
+        // Inject instructions at the start of onCreate
+        WatchWhileActivity_onCreate.method.addInstructions(
+            0,
+            """
+            invoke-static {this, "Jeremy's Custom Patch Loaded!", 1}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
+            move-result-object v0
+            invoke-virtual {v0}, Landroid/widget/Toast;->show()V
+            """
+        )
     }
 }
