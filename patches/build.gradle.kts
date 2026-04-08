@@ -1,4 +1,4 @@
-group = "app.template"
+group = "com.jeremy.patches"
 
 patches {
     about {
