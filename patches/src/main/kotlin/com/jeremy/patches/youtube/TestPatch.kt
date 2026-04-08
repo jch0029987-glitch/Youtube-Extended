@@ -1,18 +1,20 @@
 package com.jeremy.patches.youtube
 
-import app.morphe.patcher.annotation.Patch
+import app.morphe.patcher.annotation.MorphPatch // Updated import
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.util.proxy.ProxyMethod
+import app.morphe.patcher.context.BytecodeContext // Need this for the type argument
+import app.morphe.patcher.util.hook.MethodHook // New replacement for ProxyMethod
 
-@Patch(
+@MorphPatch( // Annotation name updated in v1.3
     name = "InitialToast",
-    description = "Shows a toast message when YouTube is opened for testing.",
+    description = "Shows a toast message when YouTube is opened.",
     target = "com.google.android.youtube"
 )
-class TestPatch : Patch() {
-    override fun execute() {
-        // Hooks the main activity startup
-        ProxyMethod.builder()
+class TestPatch : Patch<BytecodeContext>() { // Added <BytecodeContext> type argument
+    override fun execute(context: BytecodeContext) { // Added context parameter
+        
+        // Using the updated MethodHook API for 2026
+        MethodHook.builder()
             .className("com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity")
             .methodName("onCreate")
             .methodDescriptor("(Landroid/os/Bundle;)V")
