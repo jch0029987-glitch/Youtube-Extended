@@ -10,7 +10,6 @@ patches {
         website = "na"
         license = "GPLv3"
     }
-registration.packages("com.jeremy.patches.youtube")
 }
 
 kotlin {
