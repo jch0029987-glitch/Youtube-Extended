@@ -1,17 +1,22 @@
 package com.jeremy.patches.youtube
 
-import app.morphe.patcher.annotation.Patch
-import app.morphe.patcher.patch.BytecodePatch
-import app.morphe.patcher.util.proxy.ProxyMethod
+import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.util.hook.MethodHook
 
-@Patch(
-    name = "InitialToast",
-    description = "Shows a toast message when YouTube is opened.",
-    target = "com.google.android.youtube"
-)
-class TestPatch : BytecodePatch() {
-    override fun execute() {
-        ProxyMethod.builder()
+/**
+ * Jeremy's Test Patch
+ * Optimized for Morphe 1.3.1 and Android 17 (Cinnamon Bun)
+ */
+val initialToastPatch = bytecodePatch {
+    name = "InitialToast"
+    description = "Shows a custom toast message on YouTube startup."
+    
+    // In 2026, we call target as a function within the builder
+    target("com.google.android.youtube")
+
+    execute { context ->
+        // We use MethodHook instead of the deprecated ProxyMethod
+        MethodHook.builder()
             .className("com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity")
             .methodName("onCreate")
             .methodDescriptor("(Landroid/os/Bundle;)V")
