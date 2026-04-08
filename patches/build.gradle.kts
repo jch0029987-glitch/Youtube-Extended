@@ -14,14 +14,14 @@ patches {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
+        freeCompilerArgs = listOf("-Xcontext-receivers", "-Xcontext-parameters")
     }
 }
 
 dependencies {
     // Used by JsonGenerator.
     implementation(libs.gson)
-implementation(libs.morphePatcher)
+    implementation(libs.morphePatcher)   // ← must be camelCase (morphePatcher)
 }
 
 tasks {
@@ -36,11 +36,5 @@ tasks {
     // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
