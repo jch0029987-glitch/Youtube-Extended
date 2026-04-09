@@ -20,8 +20,15 @@ kotlin {
 
 dependencies {
     // Used by JsonGenerator.
-    implementation(libs.gson)
-    implementation(libs.morphePatcher)   // ← must be camelCase (morphePatcher)
+    
+// Standard library for JSON (used by your project)
+    implementation("com.google.code.gson:gson:2.13.2")
+
+    // The Morphe core patcher logic
+    implementation("app.morphe.patcher:patcher:1.3.3")
+
+    // THE MISSING PIECE: The DSL extensions for "method", "bytecodePatch", etc.
+    implementation("app.morphe.patcher:patcher-dsl:1.3.3")
 }
 
 tasks {
